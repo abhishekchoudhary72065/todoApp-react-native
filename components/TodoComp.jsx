@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import { View, Text, StyleSheet, TextInput } from "react-native";
+import React, { useState } from "react";
 import { CheckBox } from "react-native-elements";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import Animated, {
   useSharedValue,
@@ -14,6 +14,9 @@ const TodoComp = ({
   item: { todo, id, completed, edit },
   handleCompleted,
   handleDelete,
+  handleEdit,
+  completeEdit,
+  isActive,
 }) => {
   const randomValue = useSharedValue(1);
   const opacityValue = useSharedValue(1);
@@ -21,6 +24,8 @@ const TodoComp = ({
     duration: 500,
     easing: Easing.bezier(0.5, 0.01, 0, 1),
   };
+
+  const [input, setInput] = useState(todo);
 
   const style = useAnimatedStyle(() => {
     return {
@@ -35,12 +40,18 @@ const TodoComp = ({
       opacityValue.value = 1;
     } else {
       randomValue.value = 0.9;
-      opacityValue.value = 0.9;
+      opacityValue.value = 0.8;
     }
     handleCompleted(id);
   };
   return (
-    <Animated.View style={[styles.todoComp, style]}>
+    <Animated.View
+      style={[
+        styles.todoComp,
+        style,
+        { backgroundColor: isActive ? "skyblue" : "white" },
+      ]}
+    >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <CheckBox
           checked={completed}
@@ -49,18 +60,56 @@ const TodoComp = ({
           checkedColor="green"
           onPress={() => todoComplete(id)}
         />
-        <Text
-          style={{
-            ...styles.todoText,
-            textDecorationLine: completed ? "line-through" : "none",
-          }}
-        >
-          {todo}
-        </Text>
+        {edit ? (
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 5,
+              flex: 1,
+              marginRight: 10,
+            }}
+          >
+            <TextInput
+              value={input}
+              style={{
+                paddingHorizontal: 10,
+                paddingVertical: 4,
+                borderColor: "black",
+                flex: 1,
+                borderWidth: 2,
+                borderRadius: 5,
+              }}
+              onChangeText={(e) => setInput(e)}
+            />
+            <TouchableOpacity onPress={() => completeEdit(id, input)}>
+              <Feather name="check-circle" color="green" size={23} />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <Text
+            style={{
+              ...styles.todoText,
+              textDecorationLine: completed ? "line-through" : "none",
+            }}
+          >
+            {todo}
+          </Text>
+        )}
       </View>
-      <TouchableOpacity activeOpacity={0.8} onPress={() => handleDelete(id)}>
-        <AntDesign name="delete" size={23} color="red" />
-      </TouchableOpacity>
+      {!edit && (
+        <View style={{ flexDirection: "row", alignItem: "center", gap: 14 }}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => handleDelete(id)}
+          >
+            <AntDesign name="delete" size={23} color="red" />
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.8} onPress={() => handleEdit(id)}>
+            <Feather name="edit" size={23} color="blue" />
+          </TouchableOpacity>
+        </View>
+      )}
     </Animated.View>
   );
 };
@@ -68,9 +117,9 @@ const TodoComp = ({
 const styles = StyleSheet.create({
   todoComp: {
     flexDirection: "row",
+    paddingVertical: 10,
     alignItems: "center",
     gap: 10,
-    backgroundColor: "white",
     padding: 0,
     borderRadius: 5,
     shadowColor: "#000",

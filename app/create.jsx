@@ -1,31 +1,68 @@
-import { View, Text } from "react-native";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { TouchableOpacity } from "react-native";
-import { router } from "expo-router";
+import React, { useState } from "react";
+import { Text, StyleSheet, TouchableOpacity } from "react-native";
+import DraggableFlatList, {
+  ScaleDecorator,
+} from "react-native-draggable-flatlist";
 
-const create = () => {
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "purple", padding: 20 }}>
-      <View style={{ gap: 10 }}>
-        <Text style={{ color: "white", fontSize: 25, fontWeight: "800" }}>
-          Create Page
-        </Text>
+const NUM_ITEMS = 10;
+function getColor(i) {
+  const multiplier = 255 / (NUM_ITEMS - 1);
+  const colorVal = i * multiplier;
+  return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`;
+}
+
+const initialData = [...Array(NUM_ITEMS)].map((_, index) => {
+  const backgroundColor = getColor(index);
+  return {
+    key: `item-${index}`,
+    label: String(index) + "",
+    height: 100,
+    width: 60 + Math.random() * 40,
+    backgroundColor,
+  };
+});
+
+export default function App() {
+  const [data, setData] = useState(initialData);
+
+  const renderItem = ({ item, drag, isActive }) => {
+    return (
+      <ScaleDecorator>
         <TouchableOpacity
-          onPress={() => router.back()}
-          style={{
-            backgroundColor: "white",
-            borderRadius: 5,
-            padding: 10,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+          onLongPress={drag}
+          disabled={isActive}
+          style={[
+            styles.rowItem,
+            { backgroundColor: isActive ? "red" : item.backgroundColor },
+          ]}
         >
-          <Text>Go Back</Text>
+          <Text style={styles.text}>{item.label}</Text>
         </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );
-};
+      </ScaleDecorator>
+    );
+  };
 
-export default create;
+  return (
+    <DraggableFlatList
+      data={data}
+      onDragEnd={({ data }) => setData(data)}
+      keyExtractor={(item) => item.key}
+      renderItem={renderItem}
+    />
+  );
+}
+
+const styles = StyleSheet.create({
+  rowItem: {
+    height: 100,
+    width: 100,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  text: {
+    color: "white",
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+});
