@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { Alert } from "react-native";
 
 const appContext = createContext();
 
@@ -64,6 +65,7 @@ export default function AppContextProvider({ children }) {
       value={{
         todos,
         input,
+        setTodos,
         setInput,
         handleTodo,
         handleCompleted,

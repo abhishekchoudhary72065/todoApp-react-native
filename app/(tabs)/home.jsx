@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native";
@@ -11,7 +11,7 @@ import { StatusBar } from "expo-status-bar";
 import { useAppContext } from "../../components/context/Context";
 
 const App = () => {
-  const { todos, input, setInput, handleTodo } = useAppContext();
+  const { todos, input, setTodos, setInput, handleTodo } = useAppContext();
   const renderItem = ({ item, drag, isActive }) => {
     return (
       <ScaleDecorator>
