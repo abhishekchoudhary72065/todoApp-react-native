@@ -49,6 +49,17 @@ const TodoComp = ({ item: { todo, id, completed, edit }, isActive }) => {
         <CheckBox
           checked={completed}
           checkedIcon="dot-circle-o"
+          containerStyle={{
+            marginLeft: 20,
+            width: 20,
+            height: 27,
+            padding: 2,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          wrapperStyle={{
+            flex: 1,
+          }}
           uncheckedIcon="circle-o"
           checkedColor="green"
           onPress={() => todoComplete(id)}
