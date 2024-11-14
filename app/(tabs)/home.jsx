@@ -6,9 +6,9 @@ import TodoComp from "../../components/TodoComp";
 import DraggableFlatList, {
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
-import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 import { useAppContext } from "../../components/context/Context";
+import GradientBackground from "../../components/GradientBackground";
 
 const App = () => {
   const { todos, input, setTodos, setInput, handleTodo } = useAppContext();
@@ -28,7 +28,7 @@ const App = () => {
 
   const { textStyle, buttonText, buttonStyle } = styles;
   return (
-    <LinearGradient style={{ flex: 1 }} colors={["#322f49", "#20202f"]}>
+    <GradientBackground>
       <SafeAreaView className="flex-1 p-5">
         <View className="flex-1 gap-10">
           <View
@@ -73,7 +73,7 @@ const App = () => {
         backgroundColor="transparent"
         translucent={true}
       />
-    </LinearGradient>
+    </GradientBackground>
   );
 };
 

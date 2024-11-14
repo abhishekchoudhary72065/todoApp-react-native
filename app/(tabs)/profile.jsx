@@ -1,11 +1,15 @@
-import { View, Text } from 'react-native'
+import { Text } from 'react-native'
 import React from 'react'
+import GradientBackground from '../../components/GradientBackground'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Profile = () => {
     return (
-        <View className="flex-1 bg-red-500">
-            <Text className="text-black text-3xl font-bold">Profile</Text>
-        </View>
+        <GradientBackground>
+            <SafeAreaView className="flex-1 p-5">
+                <Text className="text-white text-3xl font-bold">Profile</Text>
+            </SafeAreaView>
+        </GradientBackground>
     )
 }
 
