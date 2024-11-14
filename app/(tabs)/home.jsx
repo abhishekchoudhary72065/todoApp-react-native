@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native";
 import TodoComp from "../../components/TodoComp";
@@ -8,61 +8,10 @@ import DraggableFlatList, {
 } from "react-native-draggable-flatlist";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
+import { useAppContext } from "../../components/context/Context";
 
 const App = () => {
-  const [input, setInput] = useState("");
-  const [todos, setTodos] = useState([]);
-  const handleTodo = () => {
-    if (input.length < 5) {
-      Alert.alert("Your task is too short!");
-      return;
-    }
-    setTodos([
-      ...todos,
-      { todo: input, id: Date.now(), completed: false, edit: false },
-    ]);
-    setInput("");
-  };
-
-  const handleCompleted = (id) => {
-    if (!id) return;
-    setTodos(
-      todos.map((item) => {
-        if (item.id === id) {
-          return { ...item, completed: !item.completed };
-        }
-        return item;
-      }),
-    );
-  };
-
-  const editTodo = (id) => {
-    setTodos(
-      todos.map((item) => {
-        if (item.id === id) {
-          return { ...item, edit: true };
-        }
-        return item;
-      }),
-    );
-  };
-
-  const handleDelete = (id) => {
-    if (!id) return;
-    setTodos(todos.filter((todo) => todo.id !== id));
-  };
-
-  const completeUpdate = (id, updateTodo) => {
-    setTodos(
-      todos.map((item) => {
-        if (item.id === id) {
-          return { ...item, todo: updateTodo, edit: false };
-        }
-        return item;
-      }),
-    );
-  };
-
+  const { todos, input, setInput, handleTodo } = useAppContext();
   const renderItem = ({ item, drag, isActive }) => {
     return (
       <ScaleDecorator>
@@ -71,20 +20,13 @@ const App = () => {
           disabled={isActive}
           style={[styles.rowItem]}
         >
-          <TodoComp
-            handleCompleted={handleCompleted}
-            handleEdit={editTodo}
-            item={item}
-            isActive={isActive}
-            handleDelete={handleDelete}
-            completeEdit={completeUpdate}
-          />
+          <TodoComp item={item} isActive={isActive} />
         </TouchableOpacity>
       </ScaleDecorator>
     );
   };
 
-  const {  textStyle, buttonText, buttonStyle } = styles;
+  const { textStyle, buttonText, buttonStyle } = styles;
   return (
     <LinearGradient style={{ flex: 1 }} colors={["#322f49", "#20202f"]}>
       <SafeAreaView className="flex-1 p-5">

@@ -9,15 +9,11 @@ import Animated, {
   useAnimatedStyle,
   Easing,
 } from "react-native-reanimated";
+import { useAppContext } from "./context/Context";
 
-const TodoComp = ({
-  item: { todo, id, completed, edit },
-  handleCompleted,
-  handleDelete,
-  handleEdit,
-  completeEdit,
-  isActive,
-}) => {
+const TodoComp = ({ item: { todo, id, completed, edit }, isActive }) => {
+  const { handleCompleted, handleDelete, editTodo, completeUpdate } =
+    useAppContext();
   const randomValue = useSharedValue(1);
   const opacityValue = useSharedValue(1);
   const config = {
@@ -82,7 +78,7 @@ const TodoComp = ({
               }}
               onChangeText={(e) => setInput(e)}
             />
-            <TouchableOpacity onPress={() => completeEdit(id, input)}>
+            <TouchableOpacity onPress={() => completeUpdate(id, input)}>
               <Feather name="check-circle" color="green" size={23} />
             </TouchableOpacity>
           </View>
@@ -105,7 +101,7 @@ const TodoComp = ({
           >
             <AntDesign name="delete" size={23} color="red" />
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.8} onPress={() => handleEdit(id)}>
+          <TouchableOpacity activeOpacity={0.8} onPress={() => editTodo(id)}>
             <Feather name="edit" size={23} color="blue" />
           </TouchableOpacity>
         </View>
