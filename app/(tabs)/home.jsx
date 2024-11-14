@@ -34,12 +34,12 @@ const App = () => {
           <View
             style={{
               padding: 15,
-              backgroundColor: "white",
               borderRadius: 10,
               justifyContent: "center",
               gap: 15,
               alignItems: "center",
             }}
+            className="bg-gray-100"
           >
             <TextInput
               value={input}
@@ -50,9 +50,9 @@ const App = () => {
                 padding: 10,
                 borderWidth: 2,
                 fontSize: 20,
-                borderColor: "red",
                 borderRadius: 5,
               }}
+              className="border-gray-700"
             />
             <TouchableOpacity style={buttonStyle} onPress={handleTodo}>
               <Text style={[textStyle, buttonText]}>Add Task</Text>

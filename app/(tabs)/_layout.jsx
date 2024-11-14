@@ -1,6 +1,6 @@
 import React from "react";
 import { Tabs } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
 const _layout = () => {
   return (
@@ -23,7 +23,19 @@ const _layout = () => {
             <Ionicons
               name={focused ? "home" : "home-outline"}
               size={24}
-              color={focused ? "orange" : "black"}
+              color={focused ? "orange" : color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <FontAwesome5
+              name={focused ? "user-alt" : "user"}
+              size={24}
+              color={focused ? "orange" : color}
             />
           ),
         }}

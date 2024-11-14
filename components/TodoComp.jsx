@@ -43,7 +43,7 @@ const TodoComp = ({ item: { todo, id, completed, edit }, isActive }) => {
   return (
     <Animated.View
       style={[styles.todoComp, style]}
-      className={`flex-row py-3 items-center gap-[10px] justify-between pr-3 mb-5 ${isActive ? "bg-teal-500" : "bg-zinc-300"}`}
+      className={`flex-row py-3 items-center gap-[10px] justify-between rounded-sm pr-3 mb-5 ${isActive ? "bg-teal-500" : "bg-zinc-300"}`}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <CheckBox
