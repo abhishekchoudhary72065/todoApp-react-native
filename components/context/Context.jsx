@@ -1,5 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { Alert } from "react-native";
+import { getCurrentUser } from "../../lib/appwrite";
 
 const appContext = createContext();
 
@@ -8,6 +9,23 @@ export const useAppContext = () => useContext(appContext);
 export default function AppContextProvider({ children }) {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getCurrentUser()
+      .then((user) => {
+        if (user) {
+          setUser(user);
+        } else {
+          setUser(null);
+        }
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   const handleTodo = () => {
     if (input.length < 5) {
@@ -65,6 +83,10 @@ export default function AppContextProvider({ children }) {
       value={{
         todos,
         input,
+        loading,
+        user,
+        setLoading,
+        setUser,
         setTodos,
         setInput,
         handleTodo,

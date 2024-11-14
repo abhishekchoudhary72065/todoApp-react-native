@@ -3,20 +3,21 @@ import { Alert, Text, TouchableOpacity, View } from "react-native";
 import GradientBackground from "../components/GradientBackground";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../components/FormField";
-import { Link, router } from "expo-router";
-import { createUser } from "../lib/appwrite";
+import { Link } from "expo-router";
 import { useAppContext } from "../components/context/Context";
+import { getCurrentUser, signInUser } from "../lib/appwrite";
 
 const signUp = () => {
-  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [form, setForm] = useState({ email: "", password: "" });
   const { setUser } = useAppContext();
   const handleSubmit = async () => {
-    if (!form.username || !form.email || !form.password) {
+    if (!form.email || !form.password) {
       Alert.alert("Fill all the fields correctly");
     }
     try {
-      const user = await createUser(form.username, form.email, form.password);
-      if (user) {
+      const user = await signInUser(form.email, form.password);
+      const result = await getCurrentUser();
+      if (result) {
         setUser(user);
         router.replace("/home");
       }
@@ -28,14 +29,8 @@ const signUp = () => {
     <GradientBackground>
       <SafeAreaView className="p-6 flex-1 gap-10 w-full justify-center items-center">
         <Text className="text-center text-3xl font-semibold text-white">
-          Todo App Sign Up
+          Todo App Sign In
         </Text>
-        <FormField
-          title="username"
-          placeholder="Enter your username"
-          inputValue={form.username}
-          handleChange={(e) => setForm({ ...form, username: e })}
-        />
         <FormField
           title="Email"
           placeholder="Enter your email"
@@ -57,12 +52,12 @@ const signUp = () => {
           </Text>
         </TouchableOpacity>
         <View className="flex-row gap-2 items-center">
-          <Text className="text-white text-lg">Already have an account</Text>
+          <Text className="text-white text-lg">Doesn't have an account</Text>
           <Link
-            href="/signIn"
+            href="/signUp"
             className="text-secondary font-semibold text-lg italic underline"
           >
-            Sign In
+            Sign Up
           </Link>
         </View>
       </SafeAreaView>

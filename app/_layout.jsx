@@ -11,6 +11,7 @@ const RootLayout = () => {
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="index" />
           <Stack.Screen name="signUp" />
+          <Stack.Screen name="signIn" />
           <Stack.Screen name="(tabs)" />
         </Stack>
       </AppContextProvider>
