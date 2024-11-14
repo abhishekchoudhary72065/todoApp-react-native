@@ -2,11 +2,8 @@ import { View, Text } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
-import { useAppContext } from "../components/context/Context";
 
 const App = () => {
-  const { todos } = useAppContext();
-  console.log(todos);
   return (
     <SafeAreaView className="flex-1 bg-red-500">
       <View className="p-5 gap-5">

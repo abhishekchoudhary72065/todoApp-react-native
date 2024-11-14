@@ -42,11 +42,8 @@ const TodoComp = ({ item: { todo, id, completed, edit }, isActive }) => {
   };
   return (
     <Animated.View
-      style={[
-        styles.todoComp,
-        style,
-        { backgroundColor: isActive ? "skyblue" : "white" },
-      ]}
+      style={[styles.todoComp, style]}
+      className={`flex-row py-3 items-center gap-[10px] justify-between pr-3 mb-5 ${isActive ? "bg-teal-500" : "bg-zinc-300"}`}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <CheckBox
@@ -112,20 +109,11 @@ const TodoComp = ({ item: { todo, id, completed, edit }, isActive }) => {
 
 const styles = StyleSheet.create({
   todoComp: {
-    flexDirection: "row",
-    paddingVertical: 10,
-    alignItems: "center",
-    gap: 10,
-    padding: 0,
-    borderRadius: 5,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
-    justifyContent: "space-between",
-    paddingRight: 10,
-    marginBottom: 15,
     tranform: [{ scale: 1 }],
   },
   todoText: {
