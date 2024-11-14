@@ -34,12 +34,12 @@ const App = () => {
           <View
             style={{
               padding: 15,
-              borderRadius: 10,
               justifyContent: "center",
               gap: 15,
               alignItems: "center",
+              borderRadius: 10,
             }}
-            className="bg-gray-100"
+            className="bg-orange-400"
           >
             <TextInput
               value={input}
@@ -80,13 +80,11 @@ const App = () => {
 const styles = StyleSheet.create({
   buttonStyle: {
     backgroundColor: "white",
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: "purple",
     width: "100%",
     padding: 12,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 5,
   },
   buttonText: {
     color: "purple",

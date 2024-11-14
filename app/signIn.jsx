@@ -3,7 +3,7 @@ import { Alert, Text, TouchableOpacity, View } from "react-native";
 import GradientBackground from "../components/GradientBackground";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../components/FormField";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { useAppContext } from "../components/context/Context";
 import { getCurrentUser, signInUser } from "../lib/appwrite";
 
