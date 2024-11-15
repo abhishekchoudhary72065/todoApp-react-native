@@ -1,6 +1,13 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { Alert } from "react-native";
-import { getCurrentUser } from "../../lib/appwrite";
+import {
+  addTodo,
+  changeEditValue,
+  completeEdit,
+  getCurrentUser,
+  getTodos,
+  todoComplete,
+} from "../../lib/appwrite";
 
 const appContext = createContext();
 
@@ -10,9 +17,10 @@ export default function AppContextProvider({ children }) {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     getCurrentUser()
       .then((user) => {
         if (user) {
@@ -27,57 +35,66 @@ export default function AppContextProvider({ children }) {
       });
   }, []);
 
-  const handleTodo = () => {
-    if (input.length < 5) {
-      Alert.alert("Your task is too short!");
-      return;
+  const listTodos = async () => {
+    setLoading(true);
+    try {
+      const todoDocs = await getTodos();
+      if (todoDocs) {
+        setTodos(todoDocs);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    } finally {
+      setLoading(false);
     }
-    setTodos([
-      ...todos,
-      { todo: input, id: Date.now(), completed: false, edit: false },
-    ]);
-    setInput("");
   };
 
-  const handleCompleted = (id) => {
+  const handleTodo = async () => {
+    if (input.length < 1) {
+      Alert.alert("Your todo is empty");
+    }
+    setLoading(true);
+    try {
+      await addTodo(input);
+      await listTodos();
+      setInput("");
+    } catch (err) {
+      Alert.alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleComplete = async (id, complete) => {
+    console.log(id);
     if (!id) return;
-    setTodos(
-      todos.map((item) => {
-        if (item.id === id) {
-          return { ...item, completed: !item.completed };
-        }
-        return item;
-      }),
-    );
+    setLoading(true);
+    await todoComplete(id, complete);
+    await listTodos();
+    setLoading(false);
   };
 
-  const editTodo = (id) => {
-    setTodos(
-      todos.map((item) => {
-        if (item.id === id) {
-          return { ...item, edit: true };
-        }
-        return item;
-      }),
-    );
+  const handleEdit = async (id, complete) => {
+    try {
+      if (complete) {
+        Alert.alert("You cannot edit completed edit!!");
+        return;
+      }
+      await changeEditValue(id);
+      await listTodos();
+    } catch (err) {
+      Alert.alert(err.message);
+    }
   };
 
-  const handleDelete = (id) => {
-    if (!id) return;
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const completeTodoEdit = async (id, newTodo) => {
+    try {
+      await completeEdit(id, newTodo);
+      await listTodos();
+    } catch (err) {
+      Alert.alert(err.message);
+    }
   };
-
-  const completeUpdate = (id, updateTodo) => {
-    setTodos(
-      todos.map((item) => {
-        if (item.id === id) {
-          return { ...item, todo: updateTodo, edit: false };
-        }
-        return item;
-      }),
-    );
-  };
-
   return (
     <appContext.Provider
       value={{
@@ -89,11 +106,11 @@ export default function AppContextProvider({ children }) {
         setUser,
         setTodos,
         setInput,
+        listTodos,
         handleTodo,
-        handleCompleted,
-        editTodo,
-        handleDelete,
-        completeUpdate,
+        handleComplete,
+        handleEdit,
+        completeTodoEdit,
       }}
     >
       {children}

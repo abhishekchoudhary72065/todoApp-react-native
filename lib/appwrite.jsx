@@ -6,6 +6,7 @@ import {
   Query,
   Avatars,
 } from "react-native-appwrite";
+import { isJSDocThisTag } from "typescript";
 
 const appwriteConfig = {
   endpoint: "https://cloud.appwrite.io/v1",
@@ -40,7 +41,7 @@ export const createUser = async (username, email, password) => {
       ID.unique(),
       email,
       password,
-      username,
+      username
     );
     if (!newAccount) throw Error;
 
@@ -57,7 +58,7 @@ export const createUser = async (username, email, password) => {
         email,
         username,
         avatar: avatarUrl,
-      },
+      }
     );
     return newUser;
   } catch (err) {
@@ -85,7 +86,7 @@ export const getCurrentUser = async () => {
     const currentUser = await database.listDocuments(
       databaseId,
       userCollectionId,
-      [Query.equal("accountId", currentAccount.$id)],
+      [Query.equal("accountId", currentAccount.$id)]
     );
 
     if (!currentUser) throw Error;
@@ -96,11 +97,70 @@ export const getCurrentUser = async () => {
   }
 };
 
-
 export async function signOut() {
   try {
     const session = await account.deleteSession("current");
     return session;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+export async function getTodos() {
+  try {
+    const todos = await database.listDocuments(databaseId, todoCollectionId);
+    return todos.documents;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+export async function addTodo(todoString) {
+  try {
+    await database.createDocument(databaseId, todoCollectionId, ID.unique(), {
+      todo: todoString,
+      completed: false,
+      edit: false,
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+export async function todoComplete(id, complete) {
+  try {
+    await database.updateDocument(databaseId, todoCollectionId, id, {
+      completed: !complete,
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+export async function changeEditValue(id) {
+  try {
+    await database.updateDocument(databaseId, todoCollectionId, id, {
+      edit: true,
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+export async function completeEdit(id, newTodo) {
+  try {
+    await database.updateDocument(databaseId, todoCollectionId, id, {
+      todo: newTodo,
+      edit: false,
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+export async function deleteTodo(id) {
+  try {
+    await database.deleteDocument(databaseId, todoCollectionId, id);
   } catch (err) {
     throw new Error(err);
   }

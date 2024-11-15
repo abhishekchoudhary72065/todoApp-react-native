@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, TextInput } from "react-native";
-import React, { useState } from "react";
+import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
 import { CheckBox } from "react-native-elements";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
@@ -11,9 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useAppContext } from "./context/Context";
 
-const TodoComp = ({ item: { todo, id, completed, edit }, isActive }) => {
-  const { handleCompleted, handleDelete, editTodo, completeUpdate } =
-    useAppContext();
+const TodoComp = ({ item: { todo, $id, completed, edit }, isActive }) => {
   const randomValue = useSharedValue(1);
   const opacityValue = useSharedValue(1);
   const config = {
@@ -21,6 +19,11 @@ const TodoComp = ({ item: { todo, id, completed, edit }, isActive }) => {
     easing: Easing.bezier(0.5, 0.01, 0, 1),
   };
 
+  // App Context
+  const { handleComplete, loading, handleEdit, completeTodoEdit } =
+    useAppContext();
+
+  // Edit input
   const [input, setInput] = useState(todo);
 
   const style = useAnimatedStyle(() => {
@@ -30,20 +33,22 @@ const TodoComp = ({ item: { todo, id, completed, edit }, isActive }) => {
     };
   });
 
-  const todoComplete = (id) => {
+  useEffect(() => {
     if (completed) {
+      randomValue.value = 0.95;
+      opacityValue.value = 0.8;
+    } else {
       randomValue.value = 1;
       opacityValue.value = 1;
-    } else {
-      randomValue.value = 0.9;
-      opacityValue.value = 0.8;
     }
-    handleCompleted(id);
-  };
+  }, [completed]);
+
   return (
     <Animated.View
       style={[styles.todoComp, style]}
-      className={`flex-row py-3 items-center gap-[10px] justify-between rounded-sm pr-3 mb-5 ${isActive ? "bg-teal-500" : "bg-zinc-300"}`}
+      className={`flex-row py-3 items-center gap-[10px] justify-between rounded-sm pr-3 mb-5 ${
+        isActive ? "bg-orange-300" : "bg-zinc-300"
+      }`}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <CheckBox
@@ -62,7 +67,8 @@ const TodoComp = ({ item: { todo, id, completed, edit }, isActive }) => {
           }}
           uncheckedIcon="circle-o"
           checkedColor="green"
-          onPress={() => todoComplete(id)}
+          onPress={() => handleComplete($id, completed)}
+          disabled={loading}
         />
         {edit ? (
           <View
@@ -86,7 +92,10 @@ const TodoComp = ({ item: { todo, id, completed, edit }, isActive }) => {
               }}
               onChangeText={(e) => setInput(e)}
             />
-            <TouchableOpacity onPress={() => completeUpdate(id, input)}>
+            <TouchableOpacity
+              onPress={() => completeTodoEdit($id, input)}
+              disabled={loading}
+            >
               <Feather name="check-circle" color="green" size={23} />
             </TouchableOpacity>
           </View>
@@ -103,14 +112,14 @@ const TodoComp = ({ item: { todo, id, completed, edit }, isActive }) => {
       </View>
       {!edit && (
         <View style={{ flexDirection: "row", alignItem: "center", gap: 14 }}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => handleDelete(id)}
-          >
+          <TouchableOpacity disabled={loading} activeOpacity={0.8}>
             <AntDesign name="delete" size={23} color="red" />
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.8} onPress={() => editTodo(id)}>
-            <Feather name="edit" size={23} color="blue" />
+          <TouchableOpacity
+            onPress={() => handleEdit($id, completed)}
+            activeOpacity={0.8}
+          >
+            <Feather name="edit" disabled={loading} size={23} color="blue" />
           </TouchableOpacity>
         </View>
       )}

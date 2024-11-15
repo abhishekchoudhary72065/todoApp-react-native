@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TextInput } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native";
 import TodoComp from "../../components/TodoComp";
@@ -11,7 +11,13 @@ import { useAppContext } from "../../components/context/Context";
 import GradientBackground from "../../components/GradientBackground";
 
 const App = () => {
-  const { todos, input, setTodos, setInput, handleTodo } = useAppContext();
+  const { todos, input, setTodos, setInput, handleTodo, listTodos } =
+    useAppContext();
+
+  useEffect(() => {
+    listTodos();
+  }, []);
+
   const renderItem = ({ item, drag, isActive }) => {
     return (
       <ScaleDecorator>
@@ -39,7 +45,7 @@ const App = () => {
               alignItems: "center",
               borderRadius: 10,
             }}
-            className="bg-orange-400"
+            className="bg-[#3b325e]"
           >
             <TextInput
               value={input}
@@ -52,7 +58,8 @@ const App = () => {
                 fontSize: 20,
                 borderRadius: 5,
               }}
-              className="border-gray-700"
+              placeholderTextColor={"#fff"}
+              className="border-gray-500 text-white"
             />
             <TouchableOpacity style={buttonStyle} onPress={handleTodo}>
               <Text style={[textStyle, buttonText]}>Add Task</Text>
@@ -62,7 +69,7 @@ const App = () => {
             <DraggableFlatList
               data={todos}
               onDragEnd={({ data }) => setTodos(data)}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.$id}
               renderItem={renderItem}
             />
           </View>
