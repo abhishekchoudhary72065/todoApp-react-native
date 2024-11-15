@@ -38,7 +38,7 @@ export default function AppContextProvider({ children }) {
   const listTodos = async () => {
     setLoading(true);
     try {
-      const todoDocs = await getTodos();
+      const todoDocs = await getTodos(user?.accountId);
       if (todoDocs) {
         setTodos(todoDocs);
       }
@@ -55,7 +55,7 @@ export default function AppContextProvider({ children }) {
     }
     setLoading(true);
     try {
-      await addTodo(input);
+      await addTodo(input, user?.accountId);
       await listTodos();
       setInput("");
     } catch (err) {
@@ -66,7 +66,6 @@ export default function AppContextProvider({ children }) {
   };
 
   const handleComplete = async (id, complete) => {
-    console.log(id);
     if (!id) return;
     setLoading(true);
     await todoComplete(id, complete);

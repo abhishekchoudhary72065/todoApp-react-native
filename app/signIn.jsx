@@ -18,7 +18,7 @@ const signUp = () => {
       const user = await signInUser(form.email, form.password);
       const result = await getCurrentUser();
       if (result) {
-        setUser(user);
+        setUser(result);
         router.replace("/home");
       }
     } catch (err) {
@@ -45,17 +45,17 @@ const signUp = () => {
         />
         <TouchableOpacity
           onPress={handleSubmit}
-          className="w-full bg-secondary p-4 rounded-md text-center justify-center items-center"
+          className="w-full bg-orange-400 p-4 rounded-md text-center justify-center items-center"
         >
-          <Text className="text-2xl text-white font-bold font-italic">
-            Sign Up
+          <Text className="text-2xl  text-white font-bold font-italic">
+            Sign In
           </Text>
         </TouchableOpacity>
         <View className="flex-row gap-2 items-center">
           <Text className="text-white text-lg">Doesn't have an account</Text>
           <Link
             href="/signUp"
-            className="text-secondary font-semibold text-lg italic underline"
+            className="text-orange-400 font-semibold text-lg italic underline"
           >
             Sign Up
           </Link>

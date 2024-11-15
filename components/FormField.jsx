@@ -12,7 +12,7 @@ const FormField = ({ title, placeholder, handleChange, inputValue }) => {
         onChangeText={handleChange}
         placeholder={placeholder}
         placeholderTextColor={"#cccccc"}
-        className="p-4 rounded-md border-2 border-secondary text-white focus:border-teal-200"
+        className="p-4 rounded-md border-2 border-orange-400 text-white focus:border-teal-200"
         keyboardType={title === "Email" ? "email-address" : ""}
         secureTextEntry={title === "Password" && !showPass}
       />

@@ -11,7 +11,7 @@ import { useAppContext } from "../../components/context/Context";
 import GradientBackground from "../../components/GradientBackground";
 
 const App = () => {
-  const { todos, input, setTodos, setInput, handleTodo, listTodos } =
+  const { todos, input, setTodos, setInput, handleTodo, listTodos, user } =
     useAppContext();
 
   useEffect(() => {

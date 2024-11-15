@@ -50,7 +50,7 @@ const signUp = () => {
         />
         <TouchableOpacity
           onPress={handleSubmit}
-          className="w-full bg-secondary p-4 rounded-md text-center justify-center items-center"
+          className="w-full bg-orange-400 p-4 rounded-md text-center justify-center items-center"
         >
           <Text className="text-2xl text-white font-bold font-italic">
             Sign Up
@@ -60,7 +60,7 @@ const signUp = () => {
           <Text className="text-white text-lg">Already have an account</Text>
           <Link
             href="/signIn"
-            className="text-secondary font-semibold text-lg italic underline"
+            className="text-orange-400 font-semibold text-lg italic underline"
           >
             Sign In
           </Link>

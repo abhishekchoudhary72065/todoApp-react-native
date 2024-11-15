@@ -6,7 +6,6 @@ import {
   Query,
   Avatars,
 } from "react-native-appwrite";
-import { isJSDocThisTag } from "typescript";
 
 const appwriteConfig = {
   endpoint: "https://cloud.appwrite.io/v1",
@@ -106,21 +105,25 @@ export async function signOut() {
   }
 }
 
-export async function getTodos() {
+export async function getTodos(userId) {
   try {
-    const todos = await database.listDocuments(databaseId, todoCollectionId);
+    const todos = await database.listDocuments(databaseId, todoCollectionId, [
+      Query.equal("createdBy", userId),
+      Query.orderDesc("$createdAt"),
+    ]);
     return todos.documents;
   } catch (err) {
     throw new Error(err);
   }
 }
 
-export async function addTodo(todoString) {
+export async function addTodo(todoString, userId) {
   try {
     await database.createDocument(databaseId, todoCollectionId, ID.unique(), {
       todo: todoString,
       completed: false,
       edit: false,
+      createdBy: userId,
     });
   } catch (err) {
     throw new Error(err);
