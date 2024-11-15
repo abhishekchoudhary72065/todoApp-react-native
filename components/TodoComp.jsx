@@ -20,8 +20,13 @@ const TodoComp = ({ item: { todo, $id, completed, edit }, isActive }) => {
   };
 
   // App Context
-  const { handleComplete, loading, handleEdit, completeTodoEdit } =
-    useAppContext();
+  const {
+    handleComplete,
+    loading,
+    handleEdit,
+    completeTodoEdit,
+    handleDelete,
+  } = useAppContext();
 
   // Edit input
   const [input, setInput] = useState(todo);
@@ -112,14 +117,19 @@ const TodoComp = ({ item: { todo, $id, completed, edit }, isActive }) => {
       </View>
       {!edit && (
         <View style={{ flexDirection: "row", alignItem: "center", gap: 14 }}>
-          <TouchableOpacity disabled={loading} activeOpacity={0.8}>
+          <TouchableOpacity
+            onPress={() => handleDelete($id)}
+            disabled={loading}
+            activeOpacity={0.8}
+          >
             <AntDesign name="delete" size={23} color="red" />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => handleEdit($id, completed)}
             activeOpacity={0.8}
+            disabled={loading}
           >
-            <Feather name="edit" disabled={loading} size={23} color="blue" />
+            <Feather name="edit" size={23} color="blue" />
           </TouchableOpacity>
         </View>
       )}

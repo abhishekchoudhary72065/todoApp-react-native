@@ -4,6 +4,7 @@ import {
   addTodo,
   changeEditValue,
   completeEdit,
+  deleteTodo,
   getCurrentUser,
   getTodos,
   todoComplete,
@@ -20,9 +21,9 @@ export default function AppContextProvider({ children }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
     getCurrentUser()
       .then((user) => {
+        setLoading(true);
         if (user) {
           setUser(user);
         } else {
@@ -94,6 +95,15 @@ export default function AppContextProvider({ children }) {
       Alert.alert(err.message);
     }
   };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteTodo(id);
+      await listTodos();
+    } catch (err) {
+      Alert.alert(err.message);
+    }
+  };
   return (
     <appContext.Provider
       value={{
@@ -110,6 +120,7 @@ export default function AppContextProvider({ children }) {
         handleComplete,
         handleEdit,
         completeTodoEdit,
+        handleDelete,
       }}
     >
       {children}
