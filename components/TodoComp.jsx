@@ -11,7 +11,10 @@ import Animated, {
 } from "react-native-reanimated";
 import { useAppContext } from "./context/Context";
 
-const TodoComp = ({ item: { todo, $id, completed, edit }, isActive }) => {
+const TodoComp = ({
+  item: { todo, $id, completed, edit, $createdAt },
+  isActive,
+}) => {
   const randomValue = useSharedValue(1);
   const opacityValue = useSharedValue(1);
   const config = {
@@ -26,6 +29,7 @@ const TodoComp = ({ item: { todo, $id, completed, edit }, isActive }) => {
     handleEdit,
     completeTodoEdit,
     handleDelete,
+    formatTime,
   } = useAppContext();
 
   // Edit input
@@ -51,88 +55,93 @@ const TodoComp = ({ item: { todo, $id, completed, edit }, isActive }) => {
   return (
     <Animated.View
       style={[styles.todoComp, style]}
-      className={`flex-row py-3 items-center gap-[10px] justify-between rounded-sm pr-3 mb-5 ${
+      className={`p-3 gap-3 rounded-sm mb-5 ${
         isActive ? "bg-orange-300" : "bg-zinc-300"
       }`}
     >
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <CheckBox
-          checked={completed}
-          checkedIcon="dot-circle-o"
-          containerStyle={{
-            marginLeft: 20,
-            width: 20,
-            height: 27,
-            padding: 2,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          wrapperStyle={{
-            flex: 1,
-          }}
-          uncheckedIcon="circle-o"
-          checkedColor="green"
-          onPress={() => handleComplete($id, completed)}
-          disabled={loading}
-        />
-        {edit ? (
-          <View
-            style={{
-              flexDirection: "row",
+      <View className="gap-[10px] flex-row items-center justify-between">
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <CheckBox
+            checked={completed}
+            checkedIcon="dot-circle-o"
+            containerStyle={{
+              width: 20,
+              height: 27,
+              padding: 2,
+              justifyContent: "center",
               alignItems: "center",
-              gap: 5,
-              flex: 1,
-              marginRight: 10,
             }}
-          >
-            <TextInput
-              value={input}
+            wrapperStyle={{
+              flex: 1,
+            }}
+            uncheckedIcon="circle-o"
+            checkedColor="green"
+            onPress={() => handleComplete($id, completed)}
+            disabled={loading}
+          />
+          {edit ? (
+            <View
               style={{
-                paddingHorizontal: 10,
-                paddingVertical: 4,
-                borderColor: "black",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 5,
                 flex: 1,
-                borderWidth: 2,
-                borderRadius: 5,
               }}
-              onChangeText={(e) => setInput(e)}
-            />
+            >
+              <TextInput
+                value={input}
+                style={{
+                  paddingHorizontal: 10,
+                  paddingVertical: 4,
+                  borderColor: "black",
+                  flex: 1,
+                  borderWidth: 2,
+                  borderRadius: 5,
+                }}
+                onChangeText={(e) => setInput(e)}
+              />
+              <TouchableOpacity
+                onPress={() => completeTodoEdit($id, input)}
+                disabled={loading}
+              >
+                <Feather name="check-circle" color="green" size={23} />
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <Text
+              style={{
+                ...styles.todoText,
+                textDecorationLine: completed ? "line-through" : "underline",
+              }}
+            >
+              {todo}
+            </Text>
+          )}
+        </View>
+        {!edit && (
+          <View style={{ flexDirection: "row", alignItem: "center", gap: 14 }}>
             <TouchableOpacity
-              onPress={() => completeTodoEdit($id, input)}
+              onPress={() => handleDelete($id)}
+              disabled={loading}
+              activeOpacity={0.8}
+            >
+              <AntDesign name="delete" size={23} color="red" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleEdit($id, completed)}
+              activeOpacity={0.8}
               disabled={loading}
             >
-              <Feather name="check-circle" color="green" size={23} />
+              <Feather name="edit" size={23} color="blue" />
             </TouchableOpacity>
           </View>
-        ) : (
-          <Text
-            style={{
-              ...styles.todoText,
-              textDecorationLine: completed ? "line-through" : "none",
-            }}
-          >
-            {todo}
-          </Text>
         )}
       </View>
-      {!edit && (
-        <View style={{ flexDirection: "row", alignItem: "center", gap: 14 }}>
-          <TouchableOpacity
-            onPress={() => handleDelete($id)}
-            disabled={loading}
-            activeOpacity={0.8}
-          >
-            <AntDesign name="delete" size={23} color="red" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleEdit($id, completed)}
-            activeOpacity={0.8}
-            disabled={loading}
-          >
-            <Feather name="edit" size={23} color="blue" />
-          </TouchableOpacity>
-        </View>
-      )}
+      <View className="px-4">
+        <Text className="text-gray-300 font-medium text-lg">
+          {formatTime($createdAt)}
+        </Text>
+      </View>
     </Animated.View>
   );
 };
@@ -149,6 +158,7 @@ const styles = StyleSheet.create({
   todoText: {
     fontSize: 20,
     color: "#131313",
+    fontWeight: '600'
   },
 });
 

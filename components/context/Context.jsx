@@ -113,6 +113,13 @@ export default function AppContextProvider({ children }) {
       setLoading(false);
     }
   };
+
+  const formatTime = (time) => {
+    const date = new Date(time);
+    // return date.toLocaleString() + " " + date.getUTCDay();
+    return date.toUTCString();
+  }
+
   return (
     <appContext.Provider
       value={{
@@ -130,6 +137,7 @@ export default function AppContextProvider({ children }) {
         handleEdit,
         completeTodoEdit,
         handleDelete,
+        formatTime,
       }}
     >
       {children}
