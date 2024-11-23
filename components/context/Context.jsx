@@ -75,6 +75,7 @@ export default function AppContextProvider({ children }) {
   };
 
   const handleEdit = async (id, complete) => {
+    setLoading(true);
     try {
       if (complete) {
         Alert.alert("You cannot edit completed edit!!");
@@ -84,24 +85,32 @@ export default function AppContextProvider({ children }) {
       await listTodos();
     } catch (err) {
       Alert.alert(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const completeTodoEdit = async (id, newTodo) => {
+    setLoading(true);
     try {
       await completeEdit(id, newTodo);
       await listTodos();
     } catch (err) {
       Alert.alert(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
+    setLoading(true);
     try {
       await deleteTodo(id);
       await listTodos();
     } catch (err) {
       Alert.alert(err.message);
+    } finally {
+      setLoading(false);
     }
   };
   return (

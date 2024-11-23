@@ -11,7 +11,7 @@ import { useAppContext } from "../../components/context/Context";
 import GradientBackground from "../../components/GradientBackground";
 
 const App = () => {
-  const { todos, input, setTodos, setInput, handleTodo, listTodos, user } =
+  const { todos, input, setTodos, setInput, handleTodo, listTodos, loading } =
     useAppContext();
 
   useEffect(() => {
@@ -23,8 +23,9 @@ const App = () => {
       <ScaleDecorator>
         <TouchableOpacity
           onLongPress={drag}
-          disabled={isActive}
+          disabled={isActive || loading}
           style={[styles.rowItem]}
+          className="disabled:opacity-70"
         >
           <TodoComp item={item} isActive={isActive} />
         </TouchableOpacity>
@@ -61,11 +62,16 @@ const App = () => {
               placeholderTextColor={"#fff"}
               className="border-gray-500 text-white"
             />
-            <TouchableOpacity style={buttonStyle} onPress={handleTodo}>
+            <TouchableOpacity
+              style={buttonStyle}
+              disabled={loading}
+              onPress={handleTodo}
+              className="disabled:opacity-70"
+            >
               <Text style={[textStyle, buttonText]}>Add Task</Text>
             </TouchableOpacity>
           </View>
-          <View>
+          <View className="p-2">
             <DraggableFlatList
               data={todos}
               onDragEnd={({ data }) => setTodos(data)}

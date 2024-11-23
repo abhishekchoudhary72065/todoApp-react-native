@@ -1,4 +1,4 @@
-import { Text, Image } from "react-native";
+import { Text, Image, View } from "react-native";
 import React from "react";
 import GradientBackground from "../../components/GradientBackground";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,19 +18,21 @@ const Profile = () => {
 
   return (
     <GradientBackground>
-      <SafeAreaView className="flex-1 p-5 gap-5 justify-center items-center">
-        <TouchableOpacity onPress={handleLogout}>
-          <MaterialIcons name="logout" size={30} color="pink" />
+      <SafeAreaView className="flex-1 p-5 gap-10 justify-center items-center">
+        <TouchableOpacity onPress={handleLogout} className="flex-row items-center gap-2 border border-pink-200 py-3 px-6 rounded-md">
+          <MaterialIcons name="logout" size={25} color="pink" />
+          <Text className="text-pink-300 text-3xl">Logout</Text>
         </TouchableOpacity>
-        <Text className="text-white text-3xl font-bold">{user?.username}</Text>
-        <Image
-          source={{ uri: user?.avatar }}
-          style={{ width: 50, height: 50, borderRadius: 50 }}
-        />
+        <View className="gap-4 items-center">
+          <Image
+            source={{ uri: user?.avatar }}
+            style={{ width: 65, height: 65, borderRadius: 50 }}
+          />
+          <Text className="text-white text-3xl font-bold">{user?.username}</Text>
+        </View>
       </SafeAreaView>
     </GradientBackground>
   );
 };
 
 export default Profile;
-

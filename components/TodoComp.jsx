@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
 import { CheckBox } from "react-native-elements";
 import { AntDesign, Feather } from "@expo/vector-icons";

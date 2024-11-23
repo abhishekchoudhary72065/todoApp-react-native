@@ -48,7 +48,7 @@ const signUp = () => {
           className="w-full bg-orange-400 p-4 rounded-md text-center justify-center items-center"
         >
           <Text className="text-2xl  text-white font-bold font-italic">
-            Sign In
+            Login
           </Text>
         </TouchableOpacity>
         <View className="flex-row gap-2 items-center">
