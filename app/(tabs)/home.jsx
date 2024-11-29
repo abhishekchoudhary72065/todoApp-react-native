@@ -71,7 +71,7 @@ const App = () => {
               <Text style={[textStyle, buttonText]}>Add Task</Text>
             </TouchableOpacity>
           </View>
-          <View className="p-2">
+          <View className="py-2">
             <DraggableFlatList
               data={todos}
               onDragEnd={({ data }) => setTodos(data)}

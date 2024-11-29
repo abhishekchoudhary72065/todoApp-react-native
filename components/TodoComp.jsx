@@ -55,7 +55,7 @@ const TodoComp = ({
   return (
     <Animated.View
       style={[styles.todoComp, style]}
-      className={`p-3 gap-3 rounded-sm mb-5 ${
+      className={`p-3 gap-1 rounded-sm mb-5 ${
         isActive ? "bg-orange-300" : "bg-zinc-300"
       }`}
     >
@@ -138,7 +138,7 @@ const TodoComp = ({
         )}
       </View>
       <View className="px-4">
-        <Text className="text-gray-300 font-medium text-lg">
+        <Text className="text-black font-medium text-lg">
           {formatTime($createdAt)}
         </Text>
       </View>
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   todoText: {
     fontSize: 20,
     color: "#131313",
-    fontWeight: '600'
+    fontWeight: "600",
   },
 });
 

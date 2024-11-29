@@ -116,9 +116,8 @@ export default function AppContextProvider({ children }) {
 
   const formatTime = (time) => {
     const date = new Date(time);
-    // return date.toLocaleString() + " " + date.getUTCDay();
     return date.toUTCString();
-  }
+  };
 
   return (
     <appContext.Provider
